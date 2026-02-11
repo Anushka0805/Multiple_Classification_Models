@@ -2,97 +2,135 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
-
+import matplotlib.pyplot as plt
 from sklearn.metrics import (
-    accuracy_score, precision_score, recall_score,
-    f1_score, roc_auc_score, matthews_corrcoef,
-    confusion_matrix, classification_report
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    roc_auc_score,
+    matthews_corrcoef,
+    confusion_matrix,
+    classification_report
 )
 
-st.set_page_config(page_title="German Credit Classification", layout="wide")
+# -----------------------------
+# Page Config
+# -----------------------------
+st.set_page_config(page_title="German Credit Classification App", layout="wide")
 
-st.title("German Credit Risk Classification App")
+st.title("German Credit Risk Classification")
+st.write("Upload test CSV data and evaluate different classification models.")
 
-st.markdown("Upload a test dataset (CSV format) to evaluate selected model.")
-
-# -------------------------
-# Load Saved Objects
-# -------------------------
+# -----------------------------
+# Load Models and Preprocessing Objects
+# -----------------------------
 @st.cache_resource
-def load_artifacts(model_name):
-    model = joblib.load(f"{model_name}.pkl")
-    scaler = joblib.load("scaler.pkl")
-    numerical_cols = joblib.load("numerical_cols.pkl")
-    return model, scaler, numerical_cols
+def load_models():
+    models = {
+        "Logistic Regression": joblib.load("model/Logistic_Regression.pkl"),
+        "Decision Tree": joblib.load("model/Decision_Tree.pkl"),
+        "KNN": joblib.load("model/KNN.pkl"),
+        "Naive Bayes": joblib.load("model/Naive_Bayes.pkl"),
+        "Random Forest": joblib.load("model/Random_Forest.pkl"),
+        "XGBoost": joblib.load("model/XGBoost.pkl"),
+    }
+    return models
 
+@st.cache_resource
+def load_preprocessing():
+    scaler = joblib.load("model/scaler.pkl")
+    numerical_cols = joblib.load("model/numerical_cols.pkl")
+    return scaler, numerical_cols
 
-# -------------------------
-# Model Selection
-# -------------------------
-model_options = [
-    "Logistic_Regression",
-    "Decision_Tree",
-    "KNN",
-    "Naive_Bayes",
-    "Random_Forest",
-    "XGBoost"
-]
+models = load_models()
+scaler, numerical_cols = load_preprocessing()
 
-selected_model = st.selectbox("Select Model", model_options)
-
-
-# -------------------------
+# -----------------------------
 # File Upload
-# -------------------------
-uploaded_file = st.file_uploader("Upload Test CSV", type=["csv"])
+# -----------------------------
+uploaded_file = st.file_uploader("Upload Test CSV File", type=["csv"])
 
 if uploaded_file is not None:
+    df = pd.read_csv(uploaded_file)
+    st.subheader("Uploaded Data Preview")
+    st.dataframe(df.head())
 
-    df_test = pd.read_csv(uploaded_file)
+    # Assume last column is target (adjust if needed)
+    target_column = df.columns[-1]
 
-    st.subheader("Preview of Uploaded Data")
-    st.write(df_test.head())
+    X = df.drop(columns=[target_column])
+    y = df[target_column]
 
-    if "Target" not in df_test.columns:
-        st.error("Uploaded CSV must contain 'Target' column.")
+    # -----------------------------
+    # Model Selection
+    # -----------------------------
+    selected_model_name = st.selectbox("Select Model", list(models.keys()))
+    model = models[selected_model_name]
+
+    # -----------------------------
+    # Preprocessing
+    # -----------------------------
+    X_processed = X.copy()
+
+    if selected_model_name in ["Logistic Regression", "KNN"]:
+        X_processed[numerical_cols] = scaler.transform(X_processed[numerical_cols])
+
+    # -----------------------------
+    # Prediction
+    # -----------------------------
+    y_pred = model.predict(X_processed)
+
+    if hasattr(model, "predict_proba"):
+        y_prob = model.predict_proba(X_processed)[:, 1]
+        auc = roc_auc_score(y, y_prob)
     else:
+        auc = None
 
-        X_test = df_test.drop("Target", axis=1)
-        y_test = df_test["Target"]
+    # -----------------------------
+    # Evaluation Metrics
+    # -----------------------------
+    accuracy = accuracy_score(y, y_pred)
+    precision = precision_score(y, y_pred)
+    recall = recall_score(y, y_pred)
+    f1 = f1_score(y, y_pred)
+    mcc = matthews_corrcoef(y, y_pred)
 
-        # Load model artifacts
-        model, scaler, numerical_cols = load_artifacts(selected_model)
+    st.subheader("Evaluation Metrics")
 
-        # Apply scaling only if needed
-        if selected_model in ["Logistic_Regression", "KNN"]:
-            X_test[numerical_cols] = scaler.transform(X_test[numerical_cols])
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Accuracy", f"{accuracy:.3f}")
+    col2.metric("Precision", f"{precision:.3f}")
+    col3.metric("Recall", f"{recall:.3f}")
 
-        # Predictions
-        y_pred = model.predict(X_test)
-        y_prob = model.predict_proba(X_test)[:, 1]
+    col4, col5, col6 = st.columns(3)
+    col4.metric("F1 Score", f"{f1:.3f}")
+    col5.metric("MCC", f"{mcc:.3f}")
+    if auc is not None:
+        col6.metric("AUC", f"{auc:.3f}")
 
-        # Metrics
-        accuracy = accuracy_score(y_test, y_pred)
-        auc = roc_auc_score(y_test, y_prob)
-        precision = precision_score(y_test, y_pred)
-        recall = recall_score(y_test, y_pred)
-        f1 = f1_score(y_test, y_pred)
-        mcc = matthews_corrcoef(y_test, y_pred)
+    # -----------------------------
+    # Confusion Matrix
+    # -----------------------------
+    st.subheader("Confusion Matrix")
 
-        st.subheader("Evaluation Metrics")
+    cm = confusion_matrix(y, y_pred)
 
-        metrics_df = pd.DataFrame({
-            "Metric": ["Accuracy", "AUC", "Precision", "Recall", "F1 Score", "MCC"],
-            "Value": [accuracy, auc, precision, recall, f1, mcc]
-        })
+    fig, ax = plt.subplots()
+    ax.matshow(cm)
+    for (i, j), val in np.ndenumerate(cm):
+        ax.text(j, i, val, ha='center', va='center')
 
-        st.table(metrics_df)
+    plt.xlabel("Predicted")
+    plt.ylabel("Actual")
+    st.pyplot(fig)
 
-        # Confusion Matrix
-        st.subheader("Confusion Matrix")
-        cm = confusion_matrix(y_test, y_pred)
-        st.write(cm)
+    # -----------------------------
+    # Classification Report
+    # -----------------------------
+    st.subheader("Classification Report")
+    report = classification_report(y, y_pred)
+    st.text(report)
 
-        # Classification Report
-        st.subheader("Classification Report")
-        st.text(classification_report(y_test, y_pred))
+else:
+    st.info("Please upload a CSV file to begin.")
