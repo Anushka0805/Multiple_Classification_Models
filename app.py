@@ -20,7 +20,8 @@ from sklearn.metrics import (
 st.set_page_config(page_title="German Credit Classification App", layout="wide")
 
 st.title("Multiple Classification Models on UCI Statlog (German Credit Data) for German Credit Risk Classification")
-st.write("Please upload the test CSV data and evaluate different classification models.")
+st.write("Anushka Choudhury - 2025AA05848
+Please upload the test CSV data and evaluate different classification models.")
 
 
 # -----------------------------
@@ -136,5 +137,6 @@ if uploaded_file is not None:
 
 else:
     st.info("Please upload a CSV file to begin.")
+
 
 
