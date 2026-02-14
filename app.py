@@ -50,7 +50,7 @@ scaler, numerical_cols = load_preprocessing()
 # File Upload
 # -----------------------------
 st.subheader("a. Upload CSV file")
-st.write("a. Please upload the test CSV data and evaluate different classification models.")
+st.write("Please upload the test CSV data and evaluate different classification models.")
 uploaded_file = st.file_uploader("Upload Test CSV File", type=["csv"])
 
 if uploaded_file is not None:
@@ -138,6 +138,7 @@ if uploaded_file is not None:
 
 else:
     st.info("Please upload a CSV file to begin.")
+
 
 
 
