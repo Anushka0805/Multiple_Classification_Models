@@ -21,7 +21,7 @@ st.set_page_config(page_title="German Credit Classification App", layout="wide")
 
 st.title("Multiple Classification Models on UCI Statlog (German Credit Data) for German Credit Risk Classification")
 st.write("Anushka Choudhury - 2025AA05848")
-st.write("Please upload the test CSV data and evaluate different classification models.")
+st.write("a. Please upload the test CSV data and evaluate different classification models.")
 
 
 # -----------------------------
@@ -51,6 +51,7 @@ scaler, numerical_cols = load_preprocessing()
 # -----------------------------
 # File Upload
 # -----------------------------
+st.subheader("a. Upload CSV file")
 uploaded_file = st.file_uploader("Upload Test CSV File", type=["csv"])
 
 if uploaded_file is not None:
@@ -68,6 +69,7 @@ if uploaded_file is not None:
     # -----------------------------
     # Model Selection
     # -----------------------------
+    st.subheader("b. Model Selection")
     selected_model_name = st.selectbox("Select Model", list(models.keys()))
     model = models[selected_model_name]
 
@@ -99,7 +101,7 @@ if uploaded_file is not None:
     f1 = f1_score(y, y_pred)
     mcc = matthews_corrcoef(y, y_pred)
 
-    st.subheader("Evaluation Metrics")
+    st.subheader("c. Evaluation Metrics")
 
     col1, col2, col3 = st.columns(3)
     col1.metric("Accuracy", f"{accuracy:.3f}")
@@ -115,7 +117,7 @@ if uploaded_file is not None:
     # -----------------------------
     # Confusion Matrix
     # -----------------------------
-    st.subheader("Confusion Matrix")
+    st.subheader("d. Confusion Matrix")
 
     cm = confusion_matrix(y, y_pred)
 
@@ -131,12 +133,13 @@ if uploaded_file is not None:
     # -----------------------------
     # Classification Report
     # -----------------------------
-    st.subheader("Classification Report")
+    st.subheader("d. Classification Report")
     report = classification_report(y, y_pred)
     st.text(report)
 
 else:
     st.info("Please upload a CSV file to begin.")
+
 
 
 
