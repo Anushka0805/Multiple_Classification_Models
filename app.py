@@ -21,8 +21,6 @@ st.set_page_config(page_title="German Credit Classification App", layout="wide")
 
 st.title("Multiple Classification Models on UCI Statlog (German Credit Data) for German Credit Risk Classification")
 st.write("Anushka Choudhury - 2025AA05848")
-st.write("a. Please upload the test CSV data and evaluate different classification models.")
-
 
 # -----------------------------
 # Load Models and Preprocessing Objects
@@ -52,6 +50,7 @@ scaler, numerical_cols = load_preprocessing()
 # File Upload
 # -----------------------------
 st.subheader("a. Upload CSV file")
+st.write("a. Please upload the test CSV data and evaluate different classification models.")
 uploaded_file = st.file_uploader("Upload Test CSV File", type=["csv"])
 
 if uploaded_file is not None:
@@ -139,6 +138,7 @@ if uploaded_file is not None:
 
 else:
     st.info("Please upload a CSV file to begin.")
+
 
 
 
