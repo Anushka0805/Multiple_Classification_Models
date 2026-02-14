@@ -3,6 +3,7 @@ import pandas as pd
 import joblib
 import matplotlib.pyplot as plt
 import time
+import numpy as np
 
 from sklearn.metrics import (
     accuracy_score,
@@ -127,7 +128,7 @@ if uploaded_file is not None:
     cm = confusion_matrix(y, y_pred)
 
     fig, ax = plt.subplots()
-    cax = ax.matshow(cm)
+    """cax = ax.matshow(cm)
     plt.colorbar(cax)
 
     for (i, j), val in enumerate(cm.flatten()):
@@ -136,7 +137,22 @@ if uploaded_file is not None:
     plt.xlabel("Predicted")
     plt.ylabel("Actual")
 
+    st.pyplot(fig)"""
+
+    st.subheader("Confusion Matrix")
+
+    cm = confusion_matrix(y, y_pred)
+
+    fig, ax = plt.subplots()
+    ax.matshow(cm)
+    for (i, j), val in np.ndenumerate(cm):
+        ax.text(j, i, val, ha='center', va='center')
+
+    plt.xlabel("Predicted")
+    plt.ylabel("Actual")
     st.pyplot(fig)
+
+    
 
     # -------------------------------------------------
     # Classification Report
