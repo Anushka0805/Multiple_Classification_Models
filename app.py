@@ -30,12 +30,12 @@ st.write(
 # Model Selection
 # -------------------------------------------------
 model_options = {
-    "Logistic Regression": "model/logistic.pkl",
-    "Decision Tree": "model/decision_tree.pkl",
-    "KNN": "model/knn.pkl",
-    "Naive Bayes": "model/naive_bayes.pkl",
-    "Random Forest": "model/random_forest.pkl",
-    "XGBoost": "model/xgboost.pkl",
+    "Logistic Regression": "model/Logistic_Regression.pkl",
+    "Decision Tree": "model/Decision_Tree.pkl",
+    "KNN": "model/KNN.pkl",
+    "Naive Bayes": "model/Naive_Bayes.pkl",
+    "Random Forest": "model/Random_Forest.pkl",
+    "XGBoost": "model/XGBoost.pkl",
 }
 
 selected_model = st.selectbox("Select Model", list(model_options.keys()))
