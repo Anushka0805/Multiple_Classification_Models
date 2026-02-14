@@ -30,12 +30,12 @@ st.write(
 # Model Selection
 # -------------------------------------------------
 model_options = {
-    "Logistic Regression": "logistic.pkl",
-    "Decision Tree": "decision_tree.pkl",
-    "KNN": "knn.pkl",
-    "Naive Bayes": "naive_bayes.pkl",
-    "Random Forest": "random_forest.pkl",
-    "XGBoost": "xgboost.pkl",
+    "Logistic Regression": "model/logistic.pkl",
+    "Decision Tree": "model/decision_tree.pkl",
+    "KNN": "model/knn.pkl",
+    "Naive Bayes": "model/naive_bayes.pkl",
+    "Random Forest": "model/random_forest.pkl",
+    "XGBoost": "model/xgboost.pkl",
 }
 
 selected_model = st.selectbox("Select Model", list(model_options.keys()))
@@ -81,8 +81,8 @@ if uploaded_file is not None:
         model = joblib.load(model_path)
 
         # Load scaler and numerical columns
-        scaler = joblib.load("scaler.pkl")
-        numerical_cols = joblib.load("numerical_cols.pkl")
+        scaler = joblib.load("model/scaler.pkl")
+        numerical_cols = joblib.load("model/numerical_cols.pkl")
 
         # Apply scaling only for required models
         if selected_model in ["Logistic Regression", "KNN"]:
