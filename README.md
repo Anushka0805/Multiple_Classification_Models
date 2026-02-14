@@ -1,4 +1,4 @@
-# German Credit Risk Classification using Machine Learning
+# Multiple Classification Models on the German Credit Risk Dataset
 
 ---
 
