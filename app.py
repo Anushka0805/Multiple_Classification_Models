@@ -38,7 +38,7 @@ baseline_metrics = {
 
 st.header("Baseline Model Performance")
 
-baseline_model_name = st.selectbox(
+"""baseline_model_name = st.selectbox(
     "Select Model (Baseline Results)",
     list(baseline_metrics.keys()),
     key="baseline_dropdown"
@@ -55,7 +55,31 @@ if st.button("Show Baseline Metrics"):
     col4, col5, col6 = st.columns(3)
     col4.metric("F1 Score", metrics["F1 Score"])
     col5.metric("MCC", metrics["MCC"])
-    col6.metric("AUC", metrics["AUC"])
+    col6.metric("AUC", metrics["AUC"])"""
+
+# ======================================================
+# 🔹 BASELINE METRICS (Always Visible)
+# ======================================================
+
+st.header("Baseline Model Performance")
+
+baseline_model_name = st.selectbox(
+    "Select Model (Baseline Results)",
+    list(baseline_metrics.keys()),
+    key="baseline_dropdown"
+)
+
+metrics = baseline_metrics[baseline_model_name]
+
+col1, col2, col3 = st.columns(3)
+col1.metric("Accuracy", metrics["Accuracy"])
+col2.metric("Precision", metrics["Precision"])
+col3.metric("Recall", metrics["Recall"])
+
+col4, col5, col6 = st.columns(3)
+col4.metric("F1 Score", metrics["F1 Score"])
+col5.metric("MCC", metrics["MCC"])
+col6.metric("AUC", metrics["AUC"])
 
 
 # ======================================================
@@ -161,3 +185,4 @@ if uploaded_file is not None:
 
 else:
     st.info("Upload a CSV file to evaluate a model.")
+
