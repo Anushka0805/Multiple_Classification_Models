@@ -10,13 +10,13 @@ This project aims to build different machine learning classification models and 
 3. Precision
 4. Recall
 5. F1 Score
-6. Matthews Correlation Coeffi cient (MCC Score).
+6. Matthews Correlation Coefficient (MCC Score).
 
 The models are:
 1. Logistic Regression
-2. Decision Tree Classifi er
-3. K-Nearest Neighbor Classifi er
-4. Naive Bayes Classifi er - Gaussian or Multinomial
+2. Decision Tree Classifier
+3. K-Nearest Neighbor Classifier
+4. Naive Bayes Classifier - Gaussian or Multinomial
 5. Ensemble Model - Random Forest
 6. Ensemble Model - XGBoost
 
