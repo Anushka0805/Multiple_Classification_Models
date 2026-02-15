@@ -80,13 +80,13 @@ Six machine learning models were implemented and evaluated:
 
 | ML Model Name | Observation about Model Performance |
 |--------------|--------------------------------------|
-| Logistic Regression | Performed well with balanced precision and recall. Provides stable and interpretable baseline results. Suitable for linear relationships in credit risk prediction. |
-| Decision Tree | Achieved high precision but lower recall. It tends to overfit and may not generalize as well as ensemble methods. |
-| kNN | Showed good recall but lower overall accuracy and MCC. Performance depends heavily on feature scaling and distance metric. |
-| Naive Bayes | Lowest accuracy among models. Assumption of feature independence may not hold for this dataset, limiting performance. |
-| Random Forest (Ensemble) | Best overall performer. Highest accuracy, F1 score, and MCC. Handles non-linearity well and reduces overfitting compared to Decision Tree. |
+| Logistic Regression | The Logistic Regression model has a balanced performance with a good Recall (0.836) and a strong F1 (0.821). However, it has a moderate MCC (0.379) and did not top in any metric. Overall, it is a stable and reliable baseline model which detects most risky borrowers while keeping a balance. |
+| Decision Tree | Achieved the highest precision (0.868), but has a lower recall (0.707). In a credit risk classification, missing actual defaulters (low recall) is risky as it can lead to financial loss. Therefore, this model is not ideal for this problem. |
+| kNN | Showed good recall, (0.836), but lower overall accuracy and MCC. It detects many risky borrowers but the overall predictive strength is weak and less stable. |
+| Naive Bayes | Lowest accuracy among models (0.695). It is a simple probabilistic model which is acceptable but weaker than others in predictive power. |
+| Random Forest (Ensemble) | Random Forest was the best overall performer with the highest Accuracy (0.775), the highest AUC (0.809), the highest Recall (0.893), the highest F1 (0.847) and the highest MCC (0.431). It detects the riskiest borrowers while maintaining strong an overall balance and robustness. It also minimizes costly false negatives. |
 | XGBoost (Ensemble) | Strong performance close to Random Forest. Slightly lower accuracy but robust and powerful gradient boosting method. |
 
 ---
 
-Among all the implemented models, **Random Forest** achieved the best overall performance across most evaluation metrics, including Accuracy, F1 Score, and MCC. Ensemble methods outperformed individual models, indicating that combining multiple weak learners improves predictive capability for credit risk classification.
+Among all the implemented models, **Random Forest** achieved the best overall performance across most evaluation metrics, including Accuracy, F1 Score, and MCC. The ensemble methods outperformed the individual models, indicating that combining multiple weak learners improves predictive capability for credit risk classification.
